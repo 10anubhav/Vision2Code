@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% block title %}Generated UI{% endblock title %}
+
+{% block body %}
+<h2>Generated HTML Code</h2>
+<pre id="code-editor" contenteditable="true"><code class="language-html">{{ html_code|escape }}</code></pre>
+
+
+<h2>Live Preview</h2>
+<iframe id="preview"></iframe>
+
+<div class="button-group">
+    <button id="downloadButton" class="modern-button">⬇️ Download HTML</button>
+    <button id="copyButton" class="modern-button">📋 Copy HTML</button>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-html.min.js"></script>
+
+<script>
+        const codeEditor = document.getElementById('code-editor');
+        const previewFrame = document.getElementById('preview');
+        
+        // Utility to escape HTML for security
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+        
+        // Function to update the live preview (safe to run on every input)
+        function updateLivePreview() {
+            const updatedHTML = codeEditor.innerText;  // get text with tags ignored
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <style>
+                    ::-webkit-scrollbar {
+                        width: 10px;
+                    }
+                    ::-webkit-scrollbar-track {
+                        background: #f0f0f0;
+                        border-radius: 8px;
+                    }
+                    ::-webkit-scrollbar-thumb {
+                        background: #888;
+                        border-radius: 8px;
+                    }
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: #555;
+                    }
+                </style>
+                ${updatedHTML}
+            `);
+            doc.close();
+        }
+        
+        // Debounced syntax highlighting after user pauses
+        let typingTimer;
+        codeEditor.addEventListener('input', () => {
+            updateLivePreview();
+        
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                highlightPreserveCursor();
+            }, 500);
+        });
+        
+        // Highlighting without losing cursor
+        function highlightPreserveCursor() {
+            const sel = window.getSelection();
+            const range = sel.getRangeAt(0);
+            const preRange = range.cloneRange();
+            preRange.selectNodeContents(codeEditor);
+            preRange.setEnd(range.endContainer, range.endOffset);
+            const offset = preRange.toString().length;
+        
+            // Plain text
+            const code = codeEditor.innerText;
+        
+            // Re-apply syntax highlight
+            const highlighted = Prism.highlight(code, Prism.languages.html, 'html');
+            codeEditor.innerHTML = `<code class="language-html">${highlighted}</code>`;
+        
+            // Restore cursor
+            setCursorPosition(codeEditor, offset);
+        }
+        
+        function setCursorPosition(container, offset) {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            let currentNode = container;
+            let charCount = 0;
+        
+            function findNode(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const nextCount = charCount + node.length;
+                    if (offset <= nextCount) {
+                        range.setStart(node, offset - charCount);
+                        range.collapse(true);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                        return true;
+                    }
+                    charCount = nextCount;
+                } else {
+                    for (let i = 0; i < node.childNodes.length; i++) {
+                        if (findNode(node.childNodes[i])) return true;
+                    }
+                }
+                return false;
+            }
+        
+            findNode(container);
+        }
+        
+        // Initial preview load
+        updateLivePreview();
+            // Function to download the HTML code as a file
+const downloadButton = document.getElementById('downloadButton');
+downloadButton.addEventListener('click', () => {
+    const htmlContent = codeEditor.textContent; // Use textContent to get plain text
+    const blob = new Blob([htmlContent], { type: 'text/html' }); // Create a Blob with HTML content
+    const url = URL.createObjectURL(blob); // Create a temporary URL for the Blob
+
+    const a = document.createElement('a'); // Create a temporary <a> element
+    a.href = url;
+    a.download = 'generated.html'; // Set the file name for the download
+    a.click(); // Trigger the download
+
+    // Clean up the temporary URL
+    URL.revokeObjectURL(url);
+});
+
+// Function to copy the HTML code to the clipboard
+const copyButton = document.getElementById('copyButton');
+copyButton.addEventListener('click', () => {
+    const htmlContent = codeEditor.textContent;
+    navigator.clipboard.writeText(htmlContent).then(() => {
+        copyButton.textContent = '✅ Copied!';
+        setTimeout(() => {
+            copyButton.textContent = '📋 Copy HTML';
+        }, 1500);
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        copyButton.textContent = '❌ Copy Failed';
+        setTimeout(() => {
+            copyButton.textContent = '📋 Copy HTML';
+        }, 1500);
+    });
+})
+        
+</script>
+
+<style>
+    h2{
+        margin-top: 20px; /* Space above headings */
+        margin-left: 20px; /* Space to the left of headings */
+    }
+    /* Light Mode Styles */
+    body.light-mode #code-editor {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #ccc;
+        font-family: 'Fira Code', 'Courier New', Courier, monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        height: 300px;
+        overflow: auto; /* Ensure scrolling works */
+        margin: 0 auto;
+        max-width: 98%;
+        white-space: pre-wrap;
+        outline: none;
+    }
+    
+    /* Dark Mode Styles */
+    body.dark-mode #code-editor {
+        background-color: #2d2d2d;
+        color: #dcdcaa;
+        border: 1px solid #3c3c3c;
+        font-family: 'Fira Code', 'Courier New', Courier, monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 0 auto;
+        max-width: 98%;
+        height: 300px;  /* Ensure height is fixed */
+        overflow: auto; /* Ensure scrolling works */
+    }
+    
+    /* Scrollbar Styles for both Light and Dark Mode */
+    #code-editor::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    #code-editor::-webkit-scrollbar-track {
+        background: #f0f0f0; /* Light gray for Light mode */
+        border-radius: 8px;
+    }
+    
+    #code-editor::-webkit-scrollbar-thumb {
+        background: #888; /* Default gray for both modes */
+        border-radius: 8px;
+    }
+    
+    #code-editor::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Darker gray when hovered */
+    }
+    
+    /* Dark Mode specific Scrollbar Style */
+    body.dark-mode #code-editor::-webkit-scrollbar-track {
+        background: #1e1e1e; /* Darker track in dark mode */
+    }
+    
+    body.dark-mode #code-editor::-webkit-scrollbar-thumb {
+        background: #555; /* Same gray for thumb in dark mode */
+    }
+
+    /* Light Mode Styles for Live Preview */
+    body.light-mode #preview {
+        background-color: #ffffff; /* White background for light mode */
+        border: 1px solid #ccc; /* Subtle border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+        border-radius: 8px; /* Rounded corners */
+    }
+
+   
+    body.dark-mode #preview {
+        background-color: #ffffff; /* Keep white background for visibility in dark mode */
+        border: 1px solid #3c3c3c; /* Subtle border for dark mode */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+        border-radius: 8px; /* Rounded corners */
+    }
+
+    /* Shared Styles for Live Preview */
+    #preview {
+            width: 98%; /* Match the width of the #code-editor */
+            max-width: 98%;
+            height: 500px;
+            margin: 20px auto; /* Center it and add spacing */
+            padding: 0;
+            border-radius: 8px;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            display: block; /* Ensure it's treated as a block-level element */  
+    }
+    
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px auto;
+        flex-wrap: wrap;
+    }
+    
+    .modern-button {
+        padding: 12px 24px;
+        background: linear-gradient(to right, #6c5ce7, #a29bfe); /* Soft purple gradient */
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4); /* Matching purple shadow */
+        transition: background 0.3s ease, transform 0.2s;
+    }
+    
+    .modern-button:hover {
+        background: linear-gradient(to right, #a29bfe, #6c5ce7);
+        transform: scale(1.05);
+    }
+    
+    .modern-button:active {
+        transform: scale(0.97);
+    }
+    
+    
+</style>
+
+{% endblock body %}
