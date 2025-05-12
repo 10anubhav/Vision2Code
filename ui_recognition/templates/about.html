@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title  %}
+About
+{% endblock title %}
+
+{% block body %}
+<div class="center-block">
+    <div class="block">
+        <h1 class="heading animate__animated animate__fadeInDown">ABOUT US</h1>
+        <p class="about-text animate__animated animate__fadeInUp">Welcome to Vision2Code, an innovative platform that transforms hand-drawn UI sketches into functional HTML code with ease. Our mission is to bridge the gap between design and development, enabling users to quickly convert their ideas into working code.</p>
+        <p class="about-text animate__animated animate__fadeInUp">Vision2Code leverages advanced AI algorithms to recognize UI elements from scanned sketches and generate accurate HTML code, complete with a live preview. Whether you're a designer looking to prototype ideas or a developer aiming to speed up your workflow, our platform provides an intuitive and efficient solution.</p>
+        <p class="about-text animate__animated animate__fadeInUp">With Vision2Code, users can simply upload a hand-drawn UI sketch, and within seconds, receive a structured HTML output along with a real-time preview of their design. The generated code can be further customized and integrated into any web project. Designed for simplicity, accuracy, and efficiency, Vision2Code empowers individuals, students, and professionals to bring their UI concepts to life effortlessly.</p>
+        <h2 class="subheading animate__animated animate__fadeInDown">Our Values</h2>
+        <ul class="values-list animate__animated animate__fadeInUp">
+          <li>Innovation: We believe in pushing the boundaries of technology to create innovative solutions that make a difference.</li>
+          <li>Accessibility: We're committed to making our technology accessible to everyone, regardless of their background or expertise.</li>
+          <li>Accuracy: We strive to provide the most accurate text extraction results, ensuring that our users can trust the output.</li>
+          <li>User-centric: We put our users at the heart of everything we do, designing our platform to meet their needs and expectations.</li>
+        </ul>
+        <h2 class="subheading animate__animated animate__fadeInDown">Get in Touch</h2>
+        <p class="contact-text animate__animated animate__fadeInUp">If you have any questions, comments, or feedback, please don't hesitate to get in touch with us. You can reach us through our contact form or by sending an email to <b>2019anubhav10@gmail.com</b> . We look forward to hearing from you!</p>
+      </div>
+  </div>
+  <style>
+    .about-text {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      .subheading {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .values-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .values-list li {
+        margin-bottom: 10px;
+      }
+      .contact-text {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+    .heading{
+        text-align:center;
+        font-family:'Montserrat', sans-serif;
+        font-weight: bold; 
+        letter-spacing: 2px; 
+        margin-bottom: 20px;
+
+    }
+    :root{
+        --mode: light;
+    }
+    .center-block {
+      margin-top: 40px;
+      margin-bottom: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 85vh; 
+    }
+    .block {
+      background-color: var(--block-bg); 
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      height:auto;
+      width: 80%;
+      color: var(--text-color);
+    }
+    :root.light-mode{
+        --block-bg: #fff;
+        --text-color: #333
+    }
+    :root.dark-mode{
+        --block-bg: #333;
+        --text-color: #fff;
+    }
+
+    /*Animation */
+    .animate__animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+      }
+    .animate__fadeInDown {
+        animation-name: fadeInDown;
+      }
+    .animate__fadeInUp {
+        animation-name: fadeInUp;
+      }
+    @keyframes fadeInDown {
+        from {
+        opacity: 0;
+        transform: translateY(-100px);
+        }
+        to {
+        opacity: 1;
+        transform: translateY(0);
+        }
+    }
+    @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+  
+  </style>
+{% endblock body %}

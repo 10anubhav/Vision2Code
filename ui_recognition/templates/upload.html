@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock title %}
+
+
+{%block body%}
+<div class="heading">
+    <h1 class="main-heading">Upload Hand Drawn UI</h1>
+    <h2 class="sub-heading">Convert your Scanned Hand Drawn Images to code</h2>
+</div>
+<div class="uploader">
+    <form id="image-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="image-input" name="image" style="display: none;" required>
+        <button type="button" class="btn btn-primary btn-lg" id="select-image-button">Select Image</button>
+
+    </form>
+</div>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    .btn {
+        font-size: 24px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .uploader {
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column; /* Ensures vertical alignment */
+        align-items: center; /* Centers the button horizontally */
+        justify-content: center; /* Centers the button vertically */
+        text-align: center;
+    }
+
+    .main-heading {
+        display: flex;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 42px;
+        line-height: 86px;
+    }
+
+    .sub-heading {
+        display: flex;
+        justify-content: center;
+        word-spacing: 5px;
+        max-width: 800px;
+        margin: 8px auto 0;
+        line-height: 32px;
+        font-size: 22px;
+        font-weight: 400;
+
+    }
+</style>
+<script>
+    const selectImageButton = document.getElementById('select-image-button');
+    const imageInput = document.getElementById('image-input');
+
+    selectImageButton.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    imageInput.addEventListener('change', () => {
+        document.getElementById('image-form').submit();
+    });
+</script>
+{%endblock body%}

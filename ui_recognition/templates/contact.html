@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}
+Contact
+{% endblock title %}
+
+{% block body %}
+<div class="center-block">
+    <div class="block">
+        <h1 class="heading animate__animated animate__fadeInDown ">Contact</h1>
+        <form method="post" action="/contact">
+            {% csrf_token %}
+            <div class="mb-3 name animate__animated animate__fadeInDown">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+            </div>
+            <div class="mb-3 email animate__animated animate__fadeInDown">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email">
+            </div>
+            <div class="mb-3 phone animate__animated animate__fadeInDown">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="phone" class="form-control" id="phone" name="phone" placeholder="Enter Your Phone Number">
+            </div>
+            <div class="mb-3 desc animate__animated animate__fadeInDown">
+                <label for="desc" class="form-label">Tell me about what you contact me for.....</label>
+                <textarea class="form-control" id="desc" rows="3" name="desc"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success btn animate__animated animate__fadeInDown">Submit</button>
+        </form>
+    </div>
+</div>
+<style>
+    .heading {
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+
+    }
+
+    :root {
+        --mode: light;
+    }
+
+    .center-block {
+        margin-top: 5px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 85vh;
+    }
+
+    .block {
+        background-color: var(--block-bg);
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        height: auto;
+        width: 80%;
+        color: var(--text-color);
+    }
+
+    :root.light-mode {
+        --block-bg: #fff;
+        --text-color: #333
+    }
+
+    :root.dark-mode {
+        --block-bg: #333;
+        --text-color: #fff;
+    }
+
+    /* Animation */
+    .animate__animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+
+    .animate__fadeInDown {
+        animation-name: fadeInDown;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-100px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+{% endblock body %}
